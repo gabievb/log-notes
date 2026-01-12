@@ -13,7 +13,7 @@
                 <input type="email" name="email" placeholder="E-mail" />
                 <input type="password" name="password" placeholder="Senha" />
 
-                <span><a href="{{route('password-request')}}">Esqueceu sua senha?</a></span>
+                <span><a href="{{ route('password.request') }}">Esqueceu sua senha?</a></span>
 
                 <x-button class='btn_fullwidth' linkto='auth'>
                     Logar

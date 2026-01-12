@@ -3,7 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\PasswordController;
+
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TaskItemController;
 use Illuminate\Support\Facades\Route;
@@ -28,8 +29,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/criar-task-item',[TaskItemController::class, 'store'])->name('store-task-item');
 });
 
-//Forgot Password Routes
-Route::get('/esqueceu-senha', [ResetPasswordController::class, 'passwordRequest'])->name('password-request');
-Route::post('/esqueceu-senha', [ResetPasswordController::class, 'passwordEmail'])->name('password-email');
-Route::get('/esqueceu-senha/{token}', [ResetPasswordController::class, 'passwordReset'])->name('password-reset');
-Route::post('/nova-senha', [ResetPasswordController::class, 'passwordUpdate'])->name('password-update');
+// //Forgot Password Routes
+Route::get('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.request');
+Route::post('/forgot-password', [PasswordController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [PasswordController::class, 'resetPassword'])->name('password.reset');
+Route::post('/reset-password', [PasswordController::class, 'updatePassword'])->name('password.update');

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Log Notes</title>
+    <title>Sistema de Login</title>
 </head>
 <body>
     <h1>Recuperação de Senha</h1>
@@ -17,7 +17,7 @@
             </ul>
         @endif
     </div> 
-    <form method="POST" action="{{route('password-update')}}">
+    <form method="POST" action="{{route('password.update')}}">
         @csrf
         
         <input type="hidden" name="token" value="{{$token}}" />
