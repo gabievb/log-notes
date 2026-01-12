@@ -22,6 +22,12 @@ Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'loginAttempt'])->name('auth');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+//Forgot Password Routes
+Route::get('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.request');
+Route::post('/forgot-password', [PasswordController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [PasswordController::class, 'resetPassword'])->name('password.reset');
+Route::post('/reset-password', [PasswordController::class, 'updatePassword'])->name('password.update');
+
 //Protected Routes, only accessible when logged in
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -29,8 +35,3 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/criar-task-item',[TaskItemController::class, 'store'])->name('store-task-item');
 });
 
-// //Forgot Password Routes
-Route::get('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.request');
-Route::post('/forgot-password', [PasswordController::class, 'sendResetLink'])->name('password.email');
-Route::get('/reset-password/{token}', [PasswordController::class, 'resetPassword'])->name('password.reset');
-Route::post('/reset-password', [PasswordController::class, 'updatePassword'])->name('password.update');
