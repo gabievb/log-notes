@@ -29,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 //Forgot Password Routes
-Route::get('/forgot-password', [ResetPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/forgot-password', [ResetPasswordController::class, 'linkEmail'])->name('password.email');
-Route::get('/reset-password/{token}', [ResetPasswordController::class, 'resetForm'])->name('password.reset');
-Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+Route::get('/esqueceu-senha', [ResetPasswordController::class, 'passwordRequest'])->name('password-request');
+Route::post('/esqueceu-senha', [ResetPasswordController::class, 'passwordEmail'])->name('password-email');
+Route::get('/esqueceu-senha/{token}', [ResetPasswordController::class, 'passwordReset'])->name('password-reset');
+Route::post('/nova-senha', [ResetPasswordController::class, 'passwordUpdate'])->name('password-update');

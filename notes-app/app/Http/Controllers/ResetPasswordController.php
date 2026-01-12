@@ -12,28 +12,28 @@ use Illuminate\Support\Str;
 
 class ResetPasswordController extends Controller
 {
-    public function showLinkRequestForm(){
-        return view('forgot-password');
+    public function passwordRequest(){
+        return view('auth.forgot-password');
     }
 
-    public function linkEmail(Request $request){
+    public function passwordEmail(Request $request){
         
         $request->validate(['email' => 'required|email']);
         $status = Password::sendResetLink(
             $request->only('email')
         );
 
-        return $status === Password::ResetLinkSent
+        return $status === Password::RESET_LINK_SENT
             ? back()->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
 
     }
 
-    public function resetForm(string $token){
-        return view('reset-password', ['token' => $token]);
+    public function passwordReset($token){
+        return view('auth.reset-password', ['token' => $token]);
     }
 
-    public function reset(Request $request){
+    public function passwordUpdate(Request $request){
         
         $request->validate([
             'token' => 'required',
@@ -54,7 +54,7 @@ class ResetPasswordController extends Controller
             }
         );
 
-        return $status === Password::PasswordReset
+        return $status === Password::PASSWORD_RESET
             ? redirect()->route('login')->with('status', __($status))
             : back()->withErrors(['email' => [__($status)]]);
 

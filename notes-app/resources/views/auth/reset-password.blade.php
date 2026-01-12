@@ -16,18 +16,26 @@
                 @endforeach
             </ul>
         @endif
-        @if(session()->has('status'))
-            <div>{{session()->get('status')}}</div>
-        @endif
     </div> 
-    <form method="POST" action="{{route('password.email')}}">
+    <form method="POST" action="{{route('password-update')}}">
         @csrf
+        
+        <input type="hidden" name="token" value="{{$token}}" />
+        
         <div>
             <label>Email:</label>
             <input type="email" name="email" placeholder="Email" />
         </div>
         <div>
-            <button type="submit">Enviar</button>
+            <label>Nova senha:</label>
+            <input type="password" name="password" placeholder="Nova senha" />
+        </div>
+        <div>
+            <label>Confirmar nova senha:</label>
+            <input type="password" name="password_confirmation" placeholder="Confirmar nova senha" />
+        </div>
+        <div>
+            <button type="submit">Salvar</button>
         </div>
     </form>
 </body>
