@@ -1,42 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sistema de Login</title>
-</head>
-<body>
-    <h1>Recuperação de Senha</h1>
-    <div>
-        @if($errors->any())
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{$error}}</li>
-                @endforeach
-            </ul>
-        @endif
-    </div> 
-    <form method="POST" action="{{route('password.update')}}">
-        @csrf
+@extends('layouts.app')
+
+@section('content')
+    <section class="form_pg">
+        <div class="form_left">
+            <h1 class="title">Redefinir senha</h1>
+            <p class="subtitle">Digite sua nova senha para recuperar o acesso à sua conta de forma segura.</p>
+        </div>
         
-        <input type="hidden" name="token" value="{{$token}}" />
-        
-        <div>
-            <label>Email:</label>
-            <input type="email" name="email" placeholder="Email" />
+        <div class="form_right">
+            <form method="POST" action="{{ route('password.update') }}">
+                @csrf
+                
+                <input type="hidden" name="token" value="{{ $token }}" />
+                
+                @error('email')
+                    <p class="field_error">{{ $message }}</p>
+                @enderror
+                <input type="email" name="email" placeholder="Seu e-mail" value="{{ old('email', request('email')) }}" class="@error('email') field_error @enderror" required />
+                
+                @error('password')
+                    <p class="field_error">{{ $message }}</p>
+                @enderror
+                <input type="password" name="password" placeholder="Nova senha" class="@error('password') field_error @enderror" required />
+                
+                @error('password_confirmation')
+                    <p class="field_error">{{ $message }}</p>
+                @enderror
+                <input type="password" name="password_confirmation" placeholder="Confirmar nova senha" class="@error('password_confirmation') field_error @enderror" required />
+
+                <x-button class='btn_fullwidth' linkto='password.update'>
+                    Redefinir senha
+                </x-button>
+
+                @if (session('status'))
+                    <span class="txt_success">{{ session('status') }}</span>
+                @endif
+            </form>
         </div>
-        <div>
-            <label>Nova senha:</label>
-            <input type="password" name="password" placeholder="Nova senha" />
-        </div>
-        <div>
-            <label>Confirmar nova senha:</label>
-            <input type="password" name="password_confirmation" placeholder="Confirmar nova senha" />
-        </div>
-        <div>
-            <button type="submit">Salvar</button>
-        </div>
-    </form>
-</body>
-</html>
+    </section>
+@endsection

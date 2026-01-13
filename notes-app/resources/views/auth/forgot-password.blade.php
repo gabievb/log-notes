@@ -1,34 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sistema de Login</title>
-</head>
-<body>
-    <h1>Recuperação de Senha</h1>
-    <div>
-        @if($errors->any())
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{$error}}</li>
-                @endforeach
-            </ul>
-        @endif
-        @if(session()->has('status'))
-            <div>{{session()->get('status')}}</div>
-        @endif
-    </div> 
-    <form method="POST" action="{{route('password.email')}}">
-        @csrf
-        <div>
-            <label>Email:</label>
-            <input type="email" name="email" placeholder="Email" />
+@extends('layouts.app')
+
+@section('content')
+    <section class="form_pg">
+        <div class="form_left">
+            <h1 class="title">Esqueceu sua senha?</h1>
+            <p class="subtitle">Digite seu e-mail para receber um link de recuperação de senha e acessar novamente sua conta.</p>
         </div>
-        <div>
-            <button type="submit">Enviar</button>
+        
+        <div class="form_right">
+            <form method="POST" action="{{ route('password.email') }}">
+                @csrf
+                
+                @error('email')
+                    <p class="field_error">{{ $message }}</p>
+                @enderror
+                <input type="email" name="email" placeholder="Seu e-mail" value="{{ old('email') }}" class="@error('email') field_error @enderror" required />
+
+                <x-button class='btn_fullwidth' linkto='password.email'>
+                    Enviar link de recuperação
+                </x-button>
+
+                @if (session('status'))
+                    <span class="txt_success">{{ session('status') }}</span>
+                @endif
+            </form>
         </div>
-    </form>
-</body>
-</html>
+    </section>
+@endsection
