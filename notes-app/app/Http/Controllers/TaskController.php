@@ -25,4 +25,18 @@ class TaskController extends Controller
             return back()->withErrors(['error' => 'Ocorreu um erro ao criar a task. Por favor, tente novamente.'])->withInput();
         }
     }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'task_id' => 'required|exists:tasks,id'
+        ]);
+
+        Task::findOrFail($request->task_id)->update([
+            'title' => $request->title
+        ]);
+
+        return redirect()->back()->with('success', 'Tarefa atualizada com sucesso!');
+    }
 }

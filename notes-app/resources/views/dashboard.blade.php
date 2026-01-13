@@ -43,6 +43,7 @@
             </form>
         </div>
     </x-modal>
+ 
 @endsection
 
 @push('scripts')
