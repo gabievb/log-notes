@@ -124,6 +124,13 @@ div.task div.task_content div.task_item svg:hover{
     opacity: .75;
 }
 
+.task_item_marked span {
+    text-decoration: line-through;
+    color: #888;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
 @media (min-width: 400px) {
     div.task{
         width: 375px;

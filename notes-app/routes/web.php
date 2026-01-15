@@ -36,5 +36,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/task/update', [TaskController::class, 'update'])->name('update-task');
     Route::put('/task-item/update', [TaskItemController::class, 'update'])->name('update-task-item');
     Route::delete('/task/{id}', [TaskController::class, 'destroy'])->name('delete-task');
+    Route::delete('/task-item/{id}', [TaskItemController::class, 'destroy'])->name('delete-task-item');
 });
 

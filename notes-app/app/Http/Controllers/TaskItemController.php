@@ -39,7 +39,16 @@ class TaskItemController extends Controller
             'is_marked' => $request->input('is_marked')
         ]);
 
-        return redirect()->back()->with('success', 'Item da tarefa atualizado com sucesso!');
+        return redirect()->route('dashboard')->with('status', 'Item atualizado com sucesso!');
+    }
+
+    public function destroy($id)
+    {
+        $taskItem = TaskItem::findOrFail($id);
+        $taskItem->delete();
+
+        // Retorna resposta JSON para o AJAX
+        return response()->json(['success' => true]);
     }
 }
 

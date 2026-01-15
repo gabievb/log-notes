@@ -182,5 +182,70 @@
             })
         });
 
+        document.addEventListener('DOMContentLoaded', () => {
+            const itemCheckboxes = document.querySelectorAll('.task_item input[type="checkbox"]');
+
+            itemCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const taskItemEl = this.closest('.task_item');
+                    
+                    const itemId = taskItemEl.dataset.taskItemId; 
+                    
+                    if (this.checked) {
+                        taskItemEl.classList.add('task_item_marked');
+
+                        const timeoutId = setTimeout(() => {
+                            deleteTaskItem(itemId, taskItemEl);
+                        }, 5000);
+
+                        taskItemEl.dataset.timeoutId = timeoutId;
+                    } else {
+                        taskItemEl.classList.remove('task_item_marked');
+
+                        const timeoutId = taskItemEl.dataset.timeoutId;
+                        if (timeoutId) {
+                            clearTimeout(timeoutId);
+                            delete taskItemEl.dataset.timeoutId;
+                        }
+                    }
+                });
+            });
+        });
+
+        function deleteTaskItem(id, elementToRemove) {
+            
+            let token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            if (!token) {
+                token = document.querySelector('input[name="_token"]')?.value;
+            }
+
+            fetch(`/task-item/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    elementToRemove.style.opacity = '0';
+                    setTimeout(() => elementToRemove.remove(), 300);
+                } else {
+                    alert('Erro ao excluir item.');
+                    elementToRemove.classList.remove('task_item_marked');
+                    elementToRemove.querySelector('input').checked = false;
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro de conexão.');
+
+                elementToRemove.classList.remove('task_item_marked');
+                elementToRemove.querySelector('input').checked = false;
+            });
+        }
+
     </script>
 @endPushOnce
