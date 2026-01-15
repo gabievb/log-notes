@@ -35,5 +35,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/criar-task-item',[TaskItemController::class, 'store'])->name('store-task-item');
     Route::put('/task/update', [TaskController::class, 'update'])->name('update-task');
     Route::put('/task-item/update', [TaskItemController::class, 'update'])->name('update-task-item');
+    Route::delete('/task/{id}', [TaskController::class, 'destroy'])->name('delete-task');
 });
 

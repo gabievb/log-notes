@@ -37,6 +37,14 @@ class TaskController extends Controller
             'title' => $request->title
         ]);
 
-        return redirect()->back()->with('success', 'Tarefa atualizada com sucesso!');
+        return redirect()->route('dashboard')->with('status', 'Tarefa atualizada com sucesso!');
+    }
+
+    public function destroy($id){
+        $task = Task::findOrFail($id);
+        $task->taskItems()->delete();
+        $task->delete();
+
+        return redirect()->route('dashboard')->with('status', 'Tarefa removida com sucesso!');
     }
 }

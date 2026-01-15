@@ -8,7 +8,11 @@
                 <x-gmdi-edit-note-r />
             </x-button>
         </div>
+        @if (session('status'))
+            <span class="txt_success">{{ session('status') }}</span>
+        @endif
         <div class="box_tasks">
+
             @foreach($tasks as $task)
                 <x-task id="{{$task->id}}" title="{{$task->title}}">
                     

@@ -8,7 +8,15 @@
 
         <div class="task_actions">
             <x-microns-edit title="Alterar" />
-            <x-fas-trash-can title="Remover" />
+
+            <form action="{{ route('delete-task', $id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?');">
+                @csrf
+                @method('DELETE')
+                
+                <button type="submit" style="background: none; border: none; padding: 0; cursor: pointer; color: inherit; display: inline-flex;">
+                    <x-fas-trash-can title="Remover" />
+                </button>
+            </form>
         </div>
     </div>
 
@@ -91,6 +99,7 @@
             <x-button class='btn_fullwidth' type="submit">Atualizar item</x-button>
         </form>
     </div>
+    
 </x-modal>
 
 
