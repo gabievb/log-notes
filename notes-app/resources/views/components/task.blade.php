@@ -68,25 +68,27 @@
     </div>
 </x-modal>
 
-<x-modal id="box-modal-task-item-edit" taskid="{{ $id }}">
+<x-modal id="box-modal-task-item-edit-{{ $id }}" taskid="{{ $id }}">
     <div class="modal_header">
         <h1>Editar item</h1>
-        <x-vaadin-close id="close-modal-task-item-edit" />
+        <x-vaadin-close class="close-modal-task-item-edit" />
     </div>
 
     <div class="modal_content">
         <form method="POST" action="{{route('update-task-item')}}">
             @csrf
+            @method('PUT')
 
             @error('content')
                 <p class="field_error">{{ $message }}</p>
             @enderror
-            <input class="fullwidth" type="text" name="content" placeholder="Item" value="{{old('content')}}" class="@error('content') field_error @enderror"/>
 
-            <input type="hidden" name="task_item_id" id="task-item-id-input" value="" />
-            <input type="hidden" name="is_marked" value="{{ App\Models\TaskItem::IS_NOT_MARKED }}" />
+            <input id="input-content-{{ $id }}" class="fullwidth @error('content') field_error @enderror" type="text" name="content" placeholder="Item" value="{{ old('content') }}" required />
 
-            <x-button class='btn_fullwidth' linkto='update-task-item'>Atualizar item</x-button>
+            <input type="hidden" name="task_item_id" id="input-task-item-id-{{ $id }}" value="">
+            <input type="hidden" name="is_marked" id="input-is-marked-{{ $id }}" value="">
+
+            <x-button class='btn_fullwidth' type="submit">Atualizar item</x-button>
         </form>
     </div>
 </x-modal>
@@ -99,7 +101,7 @@
         const btnsEditTask = document.querySelectorAll('[title="Alterar"]');
         const iconsCloseModalEdit = document.querySelectorAll('#close-modal-task-edit');
         const btnsEditTaskItem = document.querySelectorAll('[title="AlterarItem"]');
-        const iconsCloseModalEditItem = document.querySelectorAll('#close-modal-task-item-edit');
+        const iconsCloseModalEditItem = document.querySelectorAll('.close-modal-task-item-edit');
 
         btnsAddItems.forEach(btnAddIt => {
             btnAddIt.addEventListener('click', (event) => {
@@ -143,11 +145,22 @@
             btnEditIt.addEventListener('click', (event) => {
                 event.preventDefault();
 
-                const taskItemId = btnEditIt.closest('.task_item').dataset.taskitemid;
-                const taskId = btnEditIt.closest('.task').dataset.id;
-                const modalEditItem = document.querySelector(`#box-modal-task-item-edit[taskid="${taskId}"]`);
-                
-                document.getElementById('task-item-id-input').value = taskItemId;
+                const taskItemEl = btnEditIt.closest('.task_item');
+                const taskEl = btnEditIt.closest('.task');
+
+                const taskItemId = taskItemEl.getAttribute('data-task-item-id');
+                const taskId = taskEl.dataset.id;
+                const currentContent = taskItemEl.querySelector('span').innerText.trim();
+                const checkbox = taskItemEl.querySelector('input[type="checkbox"]');
+
+                const isMarkedValue = checkbox.checked ? 1 : 2;
+
+                const modalEditItem = document.getElementById(`box-modal-task-item-edit-${taskId}`);
+
+                modalEditItem.querySelector(`#input-task-item-id-${taskId}`).value = taskItemId;
+                modalEditItem.querySelector(`#input-content-${taskId}`).value = currentContent;
+                modalEditItem.querySelector(`#input-is-marked-${taskId}`).value = isMarkedValue;
+
                 modalEditItem.classList.add('opened');
             });
         });
@@ -156,8 +169,7 @@
             icCloseMod.addEventListener('click', (event) => {
                 event.preventDefault();
 
-                const modal = icCloseMod.parentNode.parentNode.parentNode;
-                modal.classList.remove('opened');
+                icCloseMod.closest('.box_modal').classList.remove('opened');
             })
         });
 
